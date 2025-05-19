@@ -99,7 +99,7 @@ output_df = pd.DataFrame({
     'Input (u)': test_df['u'],
     'Simulated Output (y)': y_test
 })
-output_df.to_excel('data/simulated_test_outputs.xlsx', index=False)
+output_df.to_excel('data/simulated_test_linear_outputs.xlsx', index=False)
 
 # Plot
 plt.figure(figsize=(8, 6))
@@ -112,4 +112,29 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
-print("Test simulation complete! Results saved to 'simulated_test_outputs.xlsx'.")
+# ========================
+# 10. Combined Plot: All Data Together
+# ========================
+plt.figure(figsize=(10, 6))
+
+# Plot training data (all points)
+plt.scatter(df['u'], df['y'], s=10, alpha=0.4, label='Training Data', color='blue')
+
+# Plot test data (true and simulated)
+plt.scatter(scaler_X.inverse_transform(X_test), y_test_original, 
+            s=30, alpha=0.7, label='True Test Data', color='orange')
+plt.scatter(scaler_X.inverse_transform(X_test), y_sim, 
+            s=30, marker='x', label='Simulated Test Data', color='red')
+
+# Plot external test simulation
+plt.scatter(output_df['Input (u)'], output_df['Simulated Output (y)'], 
+            s=30, marker='+', label='External Test Simulation', color='green')
+
+plt.xlabel('Input $u$', fontsize=12)
+plt.ylabel('Output $y$', fontsize=12)
+plt.title('Combined Plot: Training, Test, and Simulated Data', fontsize=14)
+plt.legend()
+plt.grid(True)
+plt.show()
+
+print("Test simulation complete! Results saved to 'simulated_test__linear_outputs.xlsx'.")
