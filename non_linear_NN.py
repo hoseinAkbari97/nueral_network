@@ -29,13 +29,13 @@ X_train, X_test, y_train, y_test = train_test_split(
 # 3. Configure MLP (Nonlinear)
 # ========================
 mlp = MLPRegressor(
-    hidden_layer_sizes=(50, 30, 20),  # Deeper architecture
-    activation='relu',                 # Nonlinear activation
-    solver='adam',                     # Better for nonlinear problems
-    alpha=0.001,                       # L2 regularization
+    hidden_layer_sizes=(50, 30, 20),  
+    activation='relu',                 
+    solver='adam',                    
+    alpha=0.001,                       
     learning_rate_init=0.001,
-    max_iter=5000,                     # Increased iterations
-    early_stopping=True,               # Prevent overfitting
+    max_iter=5000,                     
+    early_stopping=True,              
     random_state=42
 )
 
