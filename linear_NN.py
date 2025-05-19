@@ -69,3 +69,47 @@ plt.show()
 # ========================
 print(f'Train R²: {mlp.score(X_train, y_train):.3f}')
 print(f'Test R²: {mlp.score(X_test, y_test):.3f}')
+
+# True slope (from raw data)
+true_slope = np.polyfit(df['u'], df['y'], 1)[0]
+
+# Simulated slope (from MLP predictions)
+sim_slope = np.polyfit(scaler_X.inverse_transform(X_test).flatten(), y_sim, 1)[0]
+
+print(f'True Slope: {true_slope:.4f}')
+print(f'Simulated Slope: {sim_slope:.4f}')
+
+# ========================
+# 8. Load Test Data and Simulate
+# ========================
+test_df = pd.read_excel('data/studentDatafortest6.xls', header=None, names=['u'])
+u_test = test_df[['u']].values
+
+# Scale test input (DO NOT re-fit scaler_X!)
+u_test_scaled = scaler_X.transform(u_test)
+
+# Predict and inverse-scale
+y_test_scaled = mlp.predict(u_test_scaled)
+y_test = scaler_y.inverse_transform(y_test_scaled.reshape(-1, 1)).ravel()
+
+# ========================
+# 9. Save and Plot Results
+# ========================
+output_df = pd.DataFrame({
+    'Input (u)': test_df['u'],
+    'Simulated Output (y)': y_test
+})
+output_df.to_excel('data/simulated_test_outputs.xlsx', index=False)
+
+# Plot
+plt.figure(figsize=(8, 6))
+plt.scatter(output_df['Input (u)'], output_df['Simulated Output (y)'], 
+            s=30, alpha=0.7, color='green', label='Test Simulation')
+plt.xlabel('Input $u$', fontsize=12)
+plt.ylabel('Simulated Output $y$', fontsize=12)
+plt.title('Test Data: Input vs. Simulated Output', fontsize=14)
+plt.legend()
+plt.grid(True)
+plt.show()
+
+print("Test simulation complete! Results saved to 'simulated_test_outputs.xlsx'.")
